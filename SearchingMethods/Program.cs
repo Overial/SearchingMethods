@@ -27,8 +27,8 @@ namespace SearchingMethods
             {
                 for (int j = 0; j < dimension; ++j)
                 {
-                    // Filling matrix with random integers for debugging
-                    adjacencyMatrix[i, j] = rnd.Next(0, 9);
+                    // Filling matrix with random integers (from 0 to 1) for debugging
+                    adjacencyMatrix[i, j] = rnd.Next(0, 2);
                 }
             }
 
@@ -41,6 +41,10 @@ namespace SearchingMethods
                 }
                 Console.WriteLine();
             }
+
+            // Creating OPEN and CLOSED arrays
+            int[] arrayOpen = new int[dimension];
+            int[] arrayClosed = new int[dimension];
         }
     }
 }
