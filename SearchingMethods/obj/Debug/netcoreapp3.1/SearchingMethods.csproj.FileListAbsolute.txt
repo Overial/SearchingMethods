@@ -1,0 +1,13 @@
+D:\projects\source\repos\SearchingMethods\SearchingMethods\bin\Debug\netcoreapp3.1\SearchingMethods.exe
+D:\projects\source\repos\SearchingMethods\SearchingMethods\bin\Debug\netcoreapp3.1\SearchingMethods.deps.json
+D:\projects\source\repos\SearchingMethods\SearchingMethods\bin\Debug\netcoreapp3.1\SearchingMethods.runtimeconfig.json
+D:\projects\source\repos\SearchingMethods\SearchingMethods\bin\Debug\netcoreapp3.1\SearchingMethods.runtimeconfig.dev.json
+D:\projects\source\repos\SearchingMethods\SearchingMethods\bin\Debug\netcoreapp3.1\SearchingMethods.dll
+D:\projects\source\repos\SearchingMethods\SearchingMethods\bin\Debug\netcoreapp3.1\SearchingMethods.pdb
+D:\projects\source\repos\SearchingMethods\SearchingMethods\obj\Debug\netcoreapp3.1\SearchingMethods.csprojAssemblyReference.cache
+D:\projects\source\repos\SearchingMethods\SearchingMethods\obj\Debug\netcoreapp3.1\SearchingMethods.AssemblyInfoInputs.cache
+D:\projects\source\repos\SearchingMethods\SearchingMethods\obj\Debug\netcoreapp3.1\SearchingMethods.AssemblyInfo.cs
+D:\projects\source\repos\SearchingMethods\SearchingMethods\obj\Debug\netcoreapp3.1\SearchingMethods.csproj.CoreCompileInputs.cache
+D:\projects\source\repos\SearchingMethods\SearchingMethods\obj\Debug\netcoreapp3.1\SearchingMethods.dll
+D:\projects\source\repos\SearchingMethods\SearchingMethods\obj\Debug\netcoreapp3.1\SearchingMethods.pdb
+D:\projects\source\repos\SearchingMethods\SearchingMethods\obj\Debug\netcoreapp3.1\SearchingMethods.genruntimeconfig.cache
