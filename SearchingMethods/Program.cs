@@ -221,20 +221,6 @@ namespace SearchingMethods
             }
         }
 
-        /* int[] shortestPath = paths[0].ToArray();
-            foreach (List<int> path in paths)
-            {
-                if (path.Count < shortestPath.Length)
-                {
-                    shortestPath = path.ToArray();
-                }
-            }
-
-            foreach (int vertex in shortestPath)
-            {
-                Console.WriteLine(vertex);
-            }*/
-
         static void Main(string[] args)
         {
             // Initialize vertices list
@@ -311,7 +297,9 @@ namespace SearchingMethods
 
                         if (isEndFound)
                         {
-                            
+                            Console.WriteLine();
+                            Vertex targetVertex = vertices[end];
+                            FindPaths(targetVertex, start, end);
                         }
 
                         break;
