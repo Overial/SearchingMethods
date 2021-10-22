@@ -172,6 +172,36 @@ namespace SearchingMethods
             return false;
         }
 
+        static List<Vertex> rClosed = new List<Vertex>();
+
+        static bool RecursiveDepthFirstSearch(Vertex vertex, int end)
+        {
+            if (vertex.Id == end)
+            {
+                return true;
+            }
+            else
+            {
+                Console.Write(vertex.Id + " -> ");
+                rClosed.Add(vertex);
+
+                foreach (int successor in vertex.Successors)
+                {
+                    Vertex currentSuccessor = vertices[successor];
+
+                    if (!rClosed.Contains(currentSuccessor))
+                    {
+                        if (RecursiveDepthFirstSearch(currentSuccessor, end) == true)
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+
+            return false;
+        }
+
         static HashSet<int> path = new HashSet<int>();
 
         static void FindPaths(Vertex vertex, int start, int end)
@@ -270,7 +300,7 @@ namespace SearchingMethods
             while (inputFlag)
             {
                 int method = 0;
-                Console.Write("Enter preferred method (1 – BFS, 2 – DFS): ");
+                Console.Write("Enter preferred method (1 – BFS, 2 – DFS, 3 – RDFS): ");
                 method = Convert.ToInt32(Console.ReadLine());
 
                 switch (method)
@@ -281,13 +311,6 @@ namespace SearchingMethods
                         isEndFound = BreadthFirstSearch(vertices[start], end);
                         Console.WriteLine(isEndFound);
 
-                        if (isEndFound)
-                        {
-                            Console.WriteLine();
-                            Vertex targetVertex = vertices[end];
-                            FindPaths(targetVertex, start, end);
-                        }
-
                         break;
                     case 2:
                         inputFlag = false;
@@ -295,17 +318,24 @@ namespace SearchingMethods
                         isEndFound = DepthFirstSearch(vertices[start], end);
                         Console.WriteLine(isEndFound);
 
-                        if (isEndFound)
-                        {
-                            Console.WriteLine();
-                            Vertex targetVertex = vertices[end];
-                            FindPaths(targetVertex, start, end);
-                        }
+                        break;
+                    case 3:
+                        inputFlag = false;
+
+                        isEndFound = RecursiveDepthFirstSearch(vertices[start], end);
+                        Console.WriteLine(isEndFound);
 
                         break;
                     default:
                         Console.WriteLine("Invalid input. Choose another option.");
                         break;
+                }
+
+                if (isEndFound)
+                {
+                    Console.WriteLine();
+                    Vertex targetVertex = vertices[end];
+                    FindPaths(targetVertex, start, end);
                 }
             }
         }
