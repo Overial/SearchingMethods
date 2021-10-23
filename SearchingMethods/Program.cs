@@ -11,6 +11,9 @@ namespace SearchingMethods
             // Set vertex's id
             this.Id = id;
 
+            // Set vertex's status
+            this.IsClosed = false;
+
             // Initialize predecessors list
             this.Predecessors = new List<int>();
 
@@ -54,6 +57,9 @@ namespace SearchingMethods
         // Vertex's id
         public int Id;
 
+        // Vertex's status
+        public bool IsClosed;
+
         // Vertex's predecessors
         public List<int> Predecessors;
 
@@ -82,6 +88,18 @@ namespace SearchingMethods
             { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
             { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }
         };
+
+        static void FillAdjacencyMatrix()
+        {
+            for (int i = 0; i < adjacencyMatrixDimension; ++i)
+            {
+                for (int j = 0; j < adjacencyMatrixDimension; ++j)
+                {
+                    Console.Write("Enter [{0}][{1}] element: ", i, j);
+                    adjacencyMatrix[i, j] = Convert.ToInt32(Console.ReadLine());
+                }
+            }
+        }
 
         static bool BreadthFirstSearch(Vertex start, int end)
         {
@@ -123,6 +141,7 @@ namespace SearchingMethods
 
                 // Move current vertex to CLOSED
                 closed.Add(currentVertex);
+                currentVertex.IsClosed = true;
             }
 
             return false;
@@ -167,6 +186,7 @@ namespace SearchingMethods
 
                 // Move current vertex to CLOSED
                 closed.Add(currentVertex);
+                currentVertex.IsClosed = true;
             }
 
             return false;
@@ -184,17 +204,53 @@ namespace SearchingMethods
             {
                 Console.Write(vertex.Id + " -> ");
                 rClosed.Add(vertex);
+                vertex.IsClosed = true;
 
                 foreach (int successor in vertex.Successors)
                 {
                     Vertex currentSuccessor = vertices[successor];
 
-                    if (!rClosed.Contains(currentSuccessor))
+                    if (RecursiveDepthFirstSearch(currentSuccessor, end) == true)
                     {
-                        if (RecursiveDepthFirstSearch(currentSuccessor, end) == true)
-                        {
-                            return true;
-                        }
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        static bool RecursiveDepthFirstSearchWithSolvingPath(Vertex vertex, int start, int end, List<Vertex> solvingPath)
+        {
+            if (vertex.Id == end)
+            {
+                Console.WriteLine();
+                Console.Write(vertices[start].Id + " -> ");
+                foreach (Vertex v in solvingPath)
+                {
+                    Console.Write(v.Id);
+                    if (v != solvingPath[solvingPath.Count - 1])
+                    {
+                        Console.Write(" -> ");
+                    }
+                }
+                Console.WriteLine(" -> True");
+
+                return true;
+            }
+            else
+            {
+                rClosed.Add(vertex);
+                vertex.IsClosed = true;
+
+                foreach (int successor in vertex.Successors)
+                {
+                    Vertex currentSuccessor = vertices[successor];
+                    solvingPath.Add(currentSuccessor);
+
+                    if (RecursiveDepthFirstSearchWithSolvingPath(currentSuccessor, start, end, solvingPath) == true)
+                    {
+                        return true;
                     }
                 }
             }
@@ -206,39 +262,42 @@ namespace SearchingMethods
 
         static void FindPaths(Vertex vertex, int start, int end)
         {
-            if (vertex.Id == start)
-            {
-                return;
-            }
-
             foreach (int predecessor in vertex.Predecessors)
             {
+                if (!vertices[predecessor].IsClosed)
+                {
+                    break;
+                }
+
+                if (vertex.IsClosed)
+                {
+                    path.Add(vertex.Id);
+                }
+
                 if (vertex.Id == end)
                 {
                     path.Add(vertices[end].Id);
                 }
 
-                if (vertex.Id == start)
-                {
-                    path.Add(vertices[start].Id);
-                }
-
-                if (!path.Contains(predecessor))
+                if (!path.Contains(predecessor) && vertices[predecessor].IsClosed)
                 {
                     path.Add(predecessor);
                 }
 
                 if (predecessor == start)
                 {
-                    foreach (int v in path)
+                    int[] currentPath = new int[path.Count];
+                    path.CopyTo(currentPath);
+                    Array reversedPath = Array.CreateInstance(typeof(int), currentPath.Length);
+                    currentPath.CopyTo(reversedPath, 0);
+                    Array.Reverse(reversedPath);
+
+                    foreach (int v in reversedPath)
                     {
+                        Console.Write(v);
                         if (v != vertices[end].Id)
                         {
-                            Console.Write(" -> " + v);
-                        }
-                        else
-                        {
-                            Console.Write(v);
+                            Console.Write(" -> ");
                         }
                     }
                     Console.WriteLine();
@@ -253,6 +312,8 @@ namespace SearchingMethods
 
         static void Main(string[] args)
         {
+            // FillAdjacencyMatrix();
+
             // Initialize vertices list
             for (int i = 0; i < adjacencyMatrixDimension; ++i)
             {
@@ -300,7 +361,7 @@ namespace SearchingMethods
             while (inputFlag)
             {
                 int method = 0;
-                Console.Write("Enter preferred method (1 – BFS, 2 – DFS, 3 – RDFS): ");
+                Console.Write("Enter preferred method (1 – BFS, 2 – DFS, 3 – RDFS, 4 – RDFSP): ");
                 method = Convert.ToInt32(Console.ReadLine());
 
                 switch (method)
@@ -308,6 +369,7 @@ namespace SearchingMethods
                     case 1:
                         inputFlag = false;
 
+                        Console.WriteLine("\nProcessing:");
                         isEndFound = BreadthFirstSearch(vertices[start], end);
                         Console.WriteLine(isEndFound);
 
@@ -315,6 +377,7 @@ namespace SearchingMethods
                     case 2:
                         inputFlag = false;
 
+                        Console.WriteLine("\nProcessing:");
                         isEndFound = DepthFirstSearch(vertices[start], end);
                         Console.WriteLine(isEndFound);
 
@@ -322,8 +385,30 @@ namespace SearchingMethods
                     case 3:
                         inputFlag = false;
 
+                        Console.WriteLine("\nProcessing:");
                         isEndFound = RecursiveDepthFirstSearch(vertices[start], end);
+                        Console.Write(vertices[end].Id + " -> ");
                         Console.WriteLine(isEndFound);
+
+                        break;
+                    case 4:
+                        inputFlag = false;
+
+                        List<Vertex> solvingPath = new List<Vertex>();
+                        isEndFound = RecursiveDepthFirstSearchWithSolvingPath(vertices[start], start, end, solvingPath);
+                        if (!isEndFound)
+                        {
+                            Console.WriteLine();
+                            foreach (Vertex v in solvingPath)
+                            {
+                                Console.Write(v.Id);
+                                if (v != solvingPath[solvingPath.Count - 1])
+                                {
+                                    Console.Write(" -> ");
+                                }
+                            }
+                            Console.WriteLine(" -> False");
+                        }
 
                         break;
                     default:
@@ -335,6 +420,7 @@ namespace SearchingMethods
                 {
                     Console.WriteLine();
                     Vertex targetVertex = vertices[end];
+                    Console.WriteLine("Result: ");
                     FindPaths(targetVertex, start, end);
                 }
             }
